@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
+
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.send('in path user ');
+  res.send('in path message ');
   console.log("prinbting console");
 });
 
