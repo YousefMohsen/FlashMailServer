@@ -1,6 +1,11 @@
 var Imap = require("imap");
 var MailParser = require("mailparser").MailParser;
 var Promise = require("bluebird");
+var msgOut = [
+    subject,
+    from,
+    text
+]
 Promise.longStackTraces();
 
 var imapConfig = {
@@ -59,12 +64,14 @@ function processMessage(msg, seqno) {
     var parser = new MailParser();
     parser.on("headers", function(headers) {
         console.log("Header: " + JSON.stringify(headers));
+        msgOut.subject = headers;
     });
 
     parser.on('data', data => {
         if (data.type === 'text') {
             console.log(seqno);
             console.log(data.text);  /* data.html*/
+            msgOut.text = data.text;
         }
 
         // if (data.type === 'attachment') {
@@ -83,4 +90,6 @@ function processMessage(msg, seqno) {
         // console.log("Finished msg #" + seqno);
         parser.end();
     });
+
+    module.exports(mailreceiver)
 }
