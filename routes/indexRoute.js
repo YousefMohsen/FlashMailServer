@@ -12,7 +12,6 @@ var messages = [
   { title: "CA3 i næste uge. ", msg: "CA3 i næste uge. Hvis du har haft svært ved react i de sidste uger, laver vi en react workshop, hvor du kan optjene de nødvendige studypoints for at komme videre. Mød op hver dag i næste uge til workshop eller lav den fulde forchromede CA3 hvis du og din gruppe har mod på det. Mød op på mandag og få mere info når vi starter CA3 op.", sender: "Jens Egholm Pedersen " , date: new Date(2017,09,02,14,02),"iconUrl":url+"jens.jpg"}
   
 
-
 ];
 /* GET home page. */
 router.get('/', function(req, res, next) {

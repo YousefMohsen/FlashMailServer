@@ -1,17 +1,18 @@
 var express = require('express');
 var router = express.Router();
 
-
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.send('in path message ');
+    res.send('test login ');
+    console.log("prinbting console");
+  });
+
+
+/* GET users listing. */
+router.get('/:mail', function(req, res, next) {
+  res.send('your email is '+req.params.mail);
   console.log("prinbting console");
 });
 
-router.get('/1', function(req, res, next) {
-  res.send('Yousef');
-});
-router.get('/2', function(req, res, next) {
-  res.send('Janus');
-});
+
 module.exports = router;
