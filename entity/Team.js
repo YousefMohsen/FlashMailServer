@@ -4,15 +4,17 @@ var Schema = mongoose.Schema;
 // create a schema
 
 var teamSchema = new Schema({
-
-mails: [{mail:string, token: string}],
+name: String,
+students: [{mail:String, token: String}],
 messages:[{title: String,
     msg: String,
     senderMail: String,
+    date: Date,
     timeStamp: String}]
 
 
 });
 
 
-var Team = mongoose.model('Team', teacherSchema);
+var Team = mongoose.model('Team', teamSchema);
+module.exports = Team;
