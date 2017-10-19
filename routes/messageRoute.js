@@ -17,9 +17,26 @@ router.post('/new', function(req, res, next) {
   var sender = req.body.sender;
   var msg = req.body.msg;
   var title = req.body.title;
+  var team = req.body.team;
+
+  var newMessage = {title: title, msg: msg,senderMail: sender};
+  Team.findOneAndUpdate(
+    {name:team},
+    {$push: {"messages": newMessage}},
+    {safe: true, upsert: true},
+    function(err, model) {
+     console.log(err);
+
+     if(model===null){
+       res.send("Failed!");
+
+     }else{  res.send("Success!");}
+    
+    }
+);
+         
   console.log("Post Received: "+ title+sender+msg);
   
-res.send('test login '+title);
 });
 
 
@@ -29,9 +46,9 @@ router.get('/:teamID', function(req, res, next) {
   console.log(teamID);
   
 
-  Team.find({}, function(err, team) {
-      
-          res.send(team);  
+  Team.findOne({name:teamID}, function(err, team) {
+      if(team===null){res.send("failed ")}
+          else res.send(team.messages);  
         });
   /*Team.find({teamID: teamID}, function(err, users) {
   res.send(users);  
@@ -39,27 +56,6 @@ router.get('/:teamID', function(req, res, next) {
       */});
 
       
-
-
-
-      /* GET all teams. */
-router.get('/all', function(req, res, next) {
-  console.log(teamID);
-  
-
-  Team.find({}, (err, users)=> {
-    //if (err) throw err;
-    // object of all the users
-   console.log(users);
-   res.send(users);
-  });
-
-
-
-  /*Team.find({teamID: teamID}, function(err, users) {
-  res.send(users);  
-        });
-      */});
 
 
 

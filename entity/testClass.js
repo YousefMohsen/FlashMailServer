@@ -14,21 +14,31 @@ class testClass  {
      // this.initTeachers();
 
 
-
-
+     Team.find({}, function(err, teams) {
+      var teamList = [];
       
-     Team.find( (err, users)=> {
-      //if (err) throw err;
-      // object of all the users
-     console.log(users);
+      teams.forEach(function(team) {
+       teamList.push(team.name);
+      });
+  
+      console.log(teamList);
     });
 
 
 
-
-    Teacher.find({mail: "koe@cphbusiness.dk"}, function(err, teacher) {
-      console.log("Teacher: "+teacher);
-          });
+/*
+         var newMessage = {title: "newMessageTitle", msg: "newMessage message",senderMail: "newMessage Sender"};
+     
+    Team.findOneAndUpdate(
+      {name:"HoldA"},
+      {$push: {"messages": newMessage}},
+      {safe: true, upsert: true},
+      function(err, model) {
+        console.log(err);
+      
+      }
+  );
+*/
 
 
 

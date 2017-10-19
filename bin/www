@@ -7,6 +7,8 @@
 var app = require('../app');
 var debug = require('debug')('lektappserver:server');
 var http = require('http');
+var mongoose = require('mongoose');
+
 
 /**
  * Get port from environment and store in Express.
@@ -28,6 +30,9 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
+//connect to database
+mongoose.connect('mongodb://readWriteUser:carlsbergsport500ml@yousefmohsen.dk:27017/lektAppDB');
 
 /**
  * Normalize a port into a number, string, or false.
