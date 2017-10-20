@@ -18,26 +18,31 @@ router.post('/new', function(req, res, next) {
   var msg = req.body.msg;
   var title = req.body.title;
   var team = req.body.team;
-
   var newMessage = {title: title, msg: msg,senderMail: sender};
-  Team.findOneAndUpdate(
+  var returned = Team.findOneAndUpdate(
     {name:team},
     {$push: {"messages": newMessage}},
-    {safe: true, upsert: true},
+    {safe: true, upsert: false},
     function(err, model) {
-     console.log(err);
-
-     if(model===null){
-       res.send("Failed!");
-
-     }else{  res.send("Success!");}
+      console.log(model);      
+     if(model === null){
+     
+      res.status(507).send("Failed!");
+      console.log("Failed")
     
+    }else{  res.status(200).send("Success!");
+    console.log("success")
+  }
     }
 );
+
+});
+   /*
+
          
   console.log("Post Received: "+ title+sender+msg);
   
-});
+*/
 
 
 /* GET all messages for that team. */
