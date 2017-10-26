@@ -14,11 +14,11 @@ router.get('/', function(req, res, next) {
   
 });
 router.post('/new', function(req, res, next) {
-  var sender = req.body.sender;
+  var sender = '59f1d039a5d7553b1884935f';//req.body.sender; TODO: get sender
   var msg = req.body.msg;
   var title = req.body.title;
   var team = req.body.team;
-  var newMessage = {title: title, msg: msg,senderMail: sender};
+  var newMessage = {title: title, msg: msg,sender: sender};
   var returned = Team.findOneAndUpdate(
     {name:team},
     {$push: {"messages": newMessage}},
@@ -51,18 +51,27 @@ router.get('/:teamID', function(req, res, next) {
   console.log(teamID);
   
 
-  Team.findOne({name:teamID}, function(err, team) {
+  Team.
+  findOne({ name: teamID }).
+  populate('messages.sender').
+  exec(function(err, team) {
+  
+      console.log(team);
+
       if(team===null){res.send("failed ")}
-          else res.send(team.messages);  
-        });
-  /*Team.find({teamID: teamID}, function(err, users) {
-  res.send(users);  
-        });
-      */});
+      else res.send(team.messages);  
+    });
+ 
+ 
+ 
+ 
+      });
 
-      
+
+  
 
 
+  
 
 
 

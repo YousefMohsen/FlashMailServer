@@ -1,19 +1,172 @@
 
 var mongoose = require('mongoose');
-//var Schema = mongoose.Schema;
+var Schema = mongoose.Schema;
+
+var NewTeacher = require("./Teacher");
+var NewTeam = require("./Team");
+
 
 var Teacher = require("./Teacher");
 var Team = require("./Team");
-
 mongoose.connect('mongodb://readWriteUser:carlsbergsport500ml@yousefmohsen.dk:27017/lektAppDB');
 
 
 
 class testClass  {
     constructor() {
-     // this.initTeachers();
 
 
+/*var kasper = new NewTeacher({
+  _id: new mongoose.Types.ObjectId(),  
+  name: "Kasper Oesterbye",
+  mail: "koe@cphbusiness.dk",
+  imgUrl: "http://yousefmohsen.dk:3000/images/kasper.jpg",
+
+});
+
+kasper.save(function(err) {
+  if (err) throw err;
+
+  console.log('Kasper created!');
+});
+*/
+
+
+var sender = "59f0a5b7e5274f3808c8bd88";
+var msg = "This is a new Messages content2";
+var title ="msg title2";
+var teamName = "Hold1";
+
+
+NewTeacher.findByIdAndUpdate('59f0a5b7e5274f3808c8bd88',{ $set: { name: 'Kasper O' }},(err,doc)=>{
+if(err) console.log(err)
+console.log(doc.name);
+
+
+var team = Team.findOneAndUpdate(
+  {name:teamName},
+  {$push: {"messages": newMessage}},
+  {safe: true, upsert: false},
+  function(err, model) {
+    console.log(model);      
+
+    var newMessage = {title: title, msg: msg,sender: sender};
+    
+   if(model === null){
+   
+    console.log("Failed")
+  
+  }else{
+  console.log("success")
+}
+  }
+);
+
+
+});
+
+
+/////
+/*Story.
+findOne({ title: title }).
+populate('author').
+exec(function (err, story) {
+  if (err) return handleError(err);
+  console.log('The author is %s', story.author.name);
+  // prints "The author is Ian Fleming"
+});*/
+/*
+NewTeam.findOne({name: "Hold1"}).populate({
+  path: 'messages',
+  populate: { path: 'sender' }
+}).exec(function(err,secondRes){
+  if (err)console.log(err);
+  console.log(secondRes);
+  /*
+  secondRes.messages.forEach(function(amsg){
+    
+    console.log(amsg.sender)
+      } );
+
+    */  
+
+  //  });
+  
+/*
+create new team
+var hold1 = new NewTeam({
+  name:"Hold1",
+  students: [{mail:"elev1@live.dk", token: "elev1Token"},{mail:"elev2@live.dk", token: "elev2Token"}],
+  messages:[]
+  
+});
+
+hold1.save(function(err) {
+  if (err) throw err;
+
+  console.log('teamA created!');
+});
+*/
+
+//add new message
+
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+    newDataDesignSpike(){
+
+      var author = new Person({
+        _id: new mongoose.Types.ObjectId(),
+        name: 'Ian Fleming',
+        age: 50
+      });
+      
+      author.save(function (err) {
+        if (err) return handleError(err);
+        
+        var story1 = new Story({
+          title: 'Casino Royale',
+          author: author._id    // assign the _id from the person
+        });
+        
+        story1.save(function (err) {
+          if (err) return handleError(err);
+          // thats it!
+        });
+     
+     
+     
+      });
+
+    }
+
+    findStorysAuthor(title){
+      Story.
+      findOne({ title: title }).
+      populate('author').
+      exec(function (err, story) {
+        if (err) return handleError(err);
+        console.log('The author is %s', story.author.name);
+        // prints "The author is Ian Fleming"
+      });
+    }
+
+
+    findAllTeams(){
+
+      
      Team.find({}, function(err, teams) {
       var teamList = [];
       
@@ -23,32 +176,7 @@ class testClass  {
   
       console.log(teamList);
     });
-
-
-
-/*
-         var newMessage = {title: "newMessageTitle", msg: "newMessage message",senderMail: "newMessage Sender"};
-     
-    Team.findOneAndUpdate(
-      {name:"HoldA"},
-      {$push: {"messages": newMessage}},
-      {safe: true, upsert: true},
-      function(err, model) {
-        console.log(err);
-      
-      }
-  );
-*/
-
-
-
-//this.initMeassages();
-//console.log(this.findAllTeachers());
-
-
-
     }
-
 
 
    findAllTeachers(){
