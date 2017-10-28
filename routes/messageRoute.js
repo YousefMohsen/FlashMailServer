@@ -19,7 +19,8 @@ router.post('/new', function(req, res, next) {
   var title = req.body.title;
   var team = req.body.team;
   var newMessage = {title: title, msg: msg,sender: sender};
-  var returned = Team.findOneAndUpdate(
+
+ Team.findOneAndUpdate(
     {name:team},
     {$push: {"messages": newMessage}},
     {safe: true, upsert: false},
@@ -27,7 +28,7 @@ router.post('/new', function(req, res, next) {
       console.log(model);      
      if(model === null){
      
-      res.status(507).send("Failed!");
+      res.status(500).send("Failed!");
       console.log("Failed")
     
     }else{  res.status(200).send("Success!");
@@ -46,27 +47,43 @@ router.post('/new', function(req, res, next) {
 
 
 /* GET all messages for that team. */
-router.get('/:teamID', function(req, res, next) {
+router.get('/:teamID/:timeStamp', function(req, res, next) {
+  var timeStamp = req.params.timeStamp;
   var teamID = req.params.teamID;
-  console.log(teamID);
   
-
+  console.log(timeStamp);
+  
+if(timeStamp===0){
   Team.
-  findOne({ name: teamID }).
+  findOne({ name: teamID }).where('messages').
   populate('messages.sender').
   exec(function(err, team) {
-  
-      console.log(team);
 
       if(team===null){res.send("failed ")}
       else res.send(team.messages);  
     });
+  }
+  else{
  
- 
- 
- 
+  
+    Team.
+    findOne({ name: teamID }).
+    populate('messages.sender').
+    exec(function(err, team) {
+    
+  
+        if(team===null){res.send("failed ")}
+        else res.send(team.messages.slice(timeStamp, team.messages.length-1));  
       });
 
+
+
+  
+  
+  }
+ 
+      });
+    
 
   
 

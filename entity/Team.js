@@ -6,6 +6,7 @@ var Schema = mongoose.Schema;
 var teamSchema = new Schema({
     name: String,
     students: [{mail:String, token: String}],
+
     messages:[{
         title: String,
         msg: String,
@@ -17,6 +18,10 @@ var teamSchema = new Schema({
 
 
 var Team = mongoose.model('Team', teamSchema);
+
+
+
+
 module.exports = Team;
 
 
