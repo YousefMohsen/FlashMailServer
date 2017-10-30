@@ -5,7 +5,7 @@ var Team = require('../entity/Team');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-    res.send('test login ');
+    res.send('Team index ');
     console.log("prinbting console");
   });
 
@@ -25,6 +25,39 @@ router.get('/', function(req, res, next) {
     }
   });
   });
+
+
+
+
+  router.post('/new', function(req, res, next){
+
+
+    var teamName = req.body.newTeam.teamName;
+    var students = req.body.newTeam.teamList;
+console.log(teamName)
+  
+
+var newTeamModel = new Team({
+      name: teamName,
+      students: students
+      
+    });
+    
+    newTeamModel.save(function(err) {
+      if(err ){
+        
+         res.status(500).send("Failed!");
+         console.log("Failed")
+       
+       }else{  res.status(200).send("Success!");
+       console.log("success")
+     }
+      console.log('HoldA created!');
+    });
+
+
+
+  })
 
 /* GET users listing. */
 router.get('/:mail', function(req, res, next) {

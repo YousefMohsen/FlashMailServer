@@ -5,7 +5,10 @@ var Schema = mongoose.Schema;
 
 var teamSchema = new Schema({
     name: String,
-    students: [{mail:String, token: String}],
+    students: [{
+        name: String,
+        mail:String,
+         token: String}],
 
     messages:[{
         title: String,
