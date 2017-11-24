@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var Team = require('../entity/Team');
-
+var DatabaseFacade = require('../Data/DatabaseFacade');
 
 //var tc = new testClass();
 
@@ -9,17 +8,42 @@ var Team = require('../entity/Team');
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   //tc.getTeam()
+  DatabaseFacade.getMessagesFromEmail('messi@mail.com').then((re)=>console.log(re.length))
   res.send("Hi yohu");
 
   
 });
-router.post('/new', function(req, res, next) {
+router.post('/new', async(req, res, next)=> {
   var sender = '59f1d039a5d7553b1884935f';//req.body.sender; TODO: get sender
   var msg = req.body.msg;
   var title = req.body.title;
   var team = req.body.team;
   var newMessage = {title: title, msg: msg,sender: sender};
+console.log(newMessage)
+console.log(team)
+let result=[];
+  try{
+    result = await DatabaseFacade.addNewMessage(newMessage,team);
+  }
+    
+    catch(r){
+  console.log("error!")
+      result = null;
+  
+    }
+  
+    
+    if(result!==null){
 
+    res.status(200).send("Success!");   }
+    else{ 
+      res.status(500).send("The mail does not match!");
+      console.log("Failed")
+    }
+  
+  
+   
+/*
  Team.findOneAndUpdate(
     {name:team},
     {$push: {"messages": newMessage}},
@@ -36,6 +60,7 @@ router.post('/new', function(req, res, next) {
   }
     }
 );
+*/
 
 });
    /*
@@ -47,43 +72,65 @@ router.post('/new', function(req, res, next) {
 
 
 /* GET all messages for that team. */
-router.get('/:teamID/:timeStamp', function(req, res, next) {
+router.get('/:studentMail/:timeStamp', async(req, res, next)=> {
   var timeStamp = req.params.timeStamp;
-  var teamID = req.params.teamID;
+  var studentMail = req.params.studentMail;
   
-  console.log(timeStamp);
-  
-if(timeStamp===0){
-  Team.
-  findOne({ name: teamID }).where('messages').
-  populate('messages.sender').
-  exec(function(err, team) {
+try{
+  console.log(studentMail);
+  DatabaseFacade.getMessagesFromEmail(studentMail);
+  result = await DatabaseFacade.getMessagesFromEmail(studentMail);
+console.log(result)}
+  catch(r){
+console.log("error!")
+    result = null;
 
-      if(team===null){res.send("failed ")}
-      else res.send(team.messages);  
-    });
   }
-  else{
- 
-  
-    Team.
-    findOne({ name: teamID }).
-    populate('messages.sender').
-    exec(function(err, team) {
+
+
+  if(result!==null){  
+    
+    
+    res.json(result.slice(timeStamp, result.length));
     
   
-        if(team===null){res.send("failed ")}
-        else res.send(team.messages.slice(timeStamp, team.messages.length-1));  
-      });
-
-
-
-  
-  
   }
+  else{ 
+    res.status(500).send("The mail does not match!");
+    console.log("Failed")}
+
+
  
       });
+    /* GET all messages for that team. */
+router.get('/:studentMail/:timeStamp/:token', async(req, res, next)=> {
+  var timeStamp = req.params.timeStamp;
+  var studentMail = req.params.studentMail;
+ var token = req.params.token;
+  console.log(token);
+try{
+ await DatabaseFacade.setStudentToken(studentMail, token)
+  await DatabaseFacade.getMessagesFromEmail(studentMail);
+  result = await DatabaseFacade.getMessagesFromEmail(studentMail);}
+  catch(r){
+console.log("error!")
+    result = null;
+
+  }
+  if(result!==null){  
     
+    
+    res.json(result.slice(timeStamp, result.length-1));
+    
+  
+  }
+  else{ 
+    res.status(500).send("The mail does not match!");
+    console.log("Failed")}
+
+
+ 
+      });
 
   
 

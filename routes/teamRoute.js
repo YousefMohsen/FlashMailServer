@@ -1,41 +1,62 @@
 var express = require('express');
 var router = express.Router();
-var Team = require('../entity/Team');
+//var Team = require('../MongooseSchemas/Team');
+var DatabaseFacade = require('../Data/DatabaseFacade');
 
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
+
+
     res.send('Team index ');
     console.log("prinbting console");
   });
 
-  router.get('/all', function(req, res) {
+
+
+
+  router.get('/all', async(req, res)=> {
+    console.log("in teams")
+    let result =[];
+ try{
+     result  = await DatabaseFacade.getAllTeams();
+  }catch(er){
+console.log("er")
+result = null;
+  }
+
+
+if(result){
   
-    Team.find({}, function(err, teams) {
-      if(teams===null){ res.send("Failes")}    
-      
-      else{
-      var teamList = [];
-      
-      teams.forEach(function(team) {
-       teamList.push(team.name);
-      });
+  res.json(result)
   
-     res.send(teamList)
-    }
-  });
-  });
+} else{ 
+  res.status(500).send("Could not retrive any teams");
+  console.log("Failed")}
+});
 
 
 
 
-  router.post('/new', function(req, res, next){
+  router.post('/new', async(req, res, next)=>{
 
 
     var teamName = req.body.newTeam.teamName;
     var students = req.body.newTeam.teamList;
-console.log(teamName)
+
+DatabaseFacade.createNewTeam(students.slice(1,students.length),teamName)
+.then((result)=>{
+  console.log(result)
+  console.log("in then")
+ res.status(200).send("Success!");
+})
+.catch((er)=>{
+  console.log("in error")
+  console.log(er)
+  res.status(500).send(er);
   
+})
+  /*
 
 var newTeamModel = new Team({
       name: teamName,
@@ -55,7 +76,7 @@ var newTeamModel = new Team({
       console.log('HoldA created!');
     });
 
-
+*/
 
   })
 

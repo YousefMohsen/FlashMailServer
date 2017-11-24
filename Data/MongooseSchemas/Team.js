@@ -4,11 +4,9 @@ var Schema = mongoose.Schema;
 // create a schema
 
 var teamSchema = new Schema({
-    name: String,
-    students: [{
-        name: String,
-        mail:String,
-         token: String}],
+    name:  { type: String, unique: true },
+//    students: [{ type: Schema.Types.ObjectId, ref: 'Student' }],
+students: [{ type: Schema.Types.ObjectId, ref: 'Teacher' }],
 
     messages:[{
         title: String,
