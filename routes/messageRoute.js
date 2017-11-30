@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
   
 });
 router.post('/new', async(req, res, next)=> {
-  var sender = '59f1d039a5d7553b1884935f';//req.body.sender; TODO: get sender
+  var sender = '5a1f1bcf8bffa42e9c5c3e56';//req.body.sender; TODO: get sender
   var msg = req.body.msg;
   var title = req.body.title;
   var team = req.body.team;
@@ -78,7 +78,6 @@ router.get('/:studentMail/:timeStamp', async(req, res, next)=> {
   
 try{
   console.log(studentMail);
-  DatabaseFacade.getMessagesFromEmail(studentMail);
   result = await DatabaseFacade.getMessagesFromEmail(studentMail);
 console.log(result)}
   catch(r){

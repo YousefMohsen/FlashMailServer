@@ -6,7 +6,7 @@ var Schema = mongoose.Schema;
 var teamSchema = new Schema({
     name:  { type: String, unique: true },
 //    students: [{ type: Schema.Types.ObjectId, ref: 'Student' }],
-students: [{ type: Schema.Types.ObjectId, ref: 'Teacher' }],
+students: [{ type: Schema.Types.ObjectId, ref: 'Student' }],
 
     messages:[{
         title: String,

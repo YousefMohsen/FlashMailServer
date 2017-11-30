@@ -7,6 +7,7 @@ var studentSchema = new Schema({
   id: Schema.Types.ObjectId,  
   name: String,
   pushToken: String,
+  imgUrl: String,  
   mail: String,
   teams: [{ type: Schema.Types.ObjectId, ref: 'Team' }],
 

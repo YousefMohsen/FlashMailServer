@@ -5,8 +5,10 @@
 
 
 
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var ObjectId = mongoose.Types.ObjectId;
 
 var Teacher = require("./MongooseSchemas/Teacher");
 var Team = require("./MongooseSchemas/Team");
@@ -25,8 +27,10 @@ mongoose.connect('mongodb://readWriteUser:carlsbergsport500ml@yousefmohsen.dk:27
 
 
     constructor() {
-        
+        //this.getTeamByName("HoldA").then((res)=>console.log(JSON.stringify(res)));
 //this.initTeachers();
+
+//this.deleteStudentByID("5a1f1c6964109f51e8114b84");
 let listOfStudents = [{name:"Leo Messi", mail:"meSsi@mail.com",teams:["HoldB"]},
 {name:"Xavi", mail:"Xavi@mail.com",teams:["HoldB"]},
 {name:"Iniesta ", mail:"InieSta@Mail.com",teams:["HoldB"]},
@@ -254,12 +258,45 @@ async getAllTeams(){
 
 return teamList;
 }
+
+
+async getTeamByName(teamName){
+return Team.findOne({name: teamName}, {messages:0}).populate('students');
+}
+
+
+async deleteStudentByID(studentID){
+
+  return Student.findByIdAndRemove(studentID).then((res)=>{
+
+      console.log("TO delete: "+res);
+ 
+          for (let team of res.teams) {
+            Team.findByIdAndUpdate(team,
+            {$pull: { "students" :  new ObjectId(studentID) } })
+            .catch((err)=>console.log(err))         
+           }
+
+
+
+
+  })
+  }
+  
+  /*
+     Team.update({
+        '_id': team._id
+      },
+    {"$pull": { "students": studentID}})
+  */
+
+
 initTeachers(){
     var kasper = new Teacher({
     _id: new mongoose.Types.ObjectId(),
       name: "Kasper Oesterbye",
       mail: "koe@cphbusiness.dk",
-      imgUrl: "http://yousefmohsen.dk:3000/images/kasper.jpg",
+      imgUrl: "http://yousefmohsen.dk:4000/images/kasper.jpg",
   
     });
   
@@ -276,7 +313,7 @@ initTeachers(){
         
       name: "Lars Mortensen",
       mail: "lam@cphbusiness.dk",
-      imgUrl: "http://yousefmohsen.dk:3000/images/lars.png",
+      imgUrl: "http://yousefmohsen.dk:4000/images/lars.png",
   
     });  
   

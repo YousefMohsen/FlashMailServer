@@ -56,34 +56,35 @@ DatabaseFacade.createNewTeam(students.slice(1,students.length),teamName)
   res.status(500).send(er);
   
 })
-  /*
-
-var newTeamModel = new Team({
-      name: teamName,
-      students: students
-      
-    });
-    
-    newTeamModel.save(function(err) {
-      if(err ){
-        
-         res.status(500).send("Failed!");
-         console.log("Failed")
-       
-       }else{  res.status(200).send("Success!");
-       console.log("success")
-     }
-      console.log('HoldA created!');
-    });
-
-*/
-
+ 
   })
 
 /* GET users listing. */
-router.get('/:mail', function(req, res, next) {
-  res.send('your email is '+req.params.mail);
-  console.log("prinbting console");
+router.get('/:team', async(req, res, next) =>{
+let teamName = timeStamp = req.params.team;
+try{
+  result = await DatabaseFacade.getTeamByName(teamName)
+  console.log(result)}
+  catch(r){
+console.log("error!")
+    result = null;
+
+  }
+
+
+  if(result!==null){  
+    
+    
+    res.json(result);
+    
+  
+  }
+  else{ 
+    res.status(500).send("No team was found!");
+    console.log("Failed")}
+
+
+
 });
 
 
