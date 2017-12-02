@@ -9,19 +9,16 @@ router.get('/', function(req, res, next) {
 
 
     res.send('Team index ');
-    console.log("prinbting console");
   });
 
 
 
 
   router.get('/all', async(req, res)=> {
-    console.log("in teams")
     let result =[];
  try{
      result  = await DatabaseFacade.getAllTeams();
   }catch(er){
-console.log("er")
 result = null;
   }
 
@@ -32,7 +29,7 @@ if(result){
   
 } else{ 
   res.status(500).send("Could not retrive any teams");
-  console.log("Failed")}
+}
 });
 
 
@@ -46,7 +43,6 @@ if(result){
 
 DatabaseFacade.createNewTeam(students.slice(1,students.length),teamName)
 .then((result)=>{
-  console.log(result)
   console.log("in then")
  res.status(200).send("Success!");
 })
@@ -64,7 +60,7 @@ router.get('/:team', async(req, res, next) =>{
 let teamName = timeStamp = req.params.team;
 try{
   result = await DatabaseFacade.getTeamByName(teamName)
-  console.log(result)}
+}
   catch(r){
 console.log("error!")
     result = null;

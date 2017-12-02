@@ -46,7 +46,7 @@ let newMsg = {
 
  //this.addNewMessage(newMsg, "HoldA").then((re)=>console.log(re));
 
-//this.addStudentToTeam("Xavi@mail.com","HoldA")
+//this.addStudentToTeam("messi@mail.dk","HoldA")
 //this.getMessagesFromEmail("Xavi@mail.com")
 //this.setStudentToken("thiago@mail.com","newPushToken").then((r)=>console.log(r)).catch((er)=>console.log(er))
 //this.createNewTeam(listOfStudents,"blsaBlah");
@@ -140,9 +140,10 @@ async _formatStudentList(listOfStudents,teamID){//converts students emails to lo
 }
 
 //adds new message to the team
-async addNewMessage(newMessage, teamID){
+async addNewMessage(newMessage, teamName){
+ // console.log("FROM DATABASEFACADE:",newMessage,teamName)
    return await Team.findOneAndUpdate(
-        {name:teamID},
+        {name:teamName},
         {$push: {"messages": newMessage}},
         {safe: true, upsert: false})
         .then((model)=>{
@@ -207,8 +208,6 @@ async addStudentToTeam(studentMail,team){
   let mailInLowerCase = studentMail.toLowerCase();
   let teamID = await Team.findOne({name: team},{_id:1});
 
-  console.log(teamID)
- console.log(teamID._id)
  return await Student.findOneAndUpdate(
     {mail: mailInLowerCase},
     {$push: {"teams": teamID._id}},
@@ -261,7 +260,7 @@ return teamList;
 
 
 async getTeamByName(teamName){
-return Team.findOne({name: teamName}, {messages:0}).populate('students');
+return Team.findOne({name: teamName}, {}).where('messages').populate('messages.sender').populate('students');
 }
 
 

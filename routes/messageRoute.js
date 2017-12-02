@@ -18,7 +18,9 @@ router.post('/new', async(req, res, next)=> {
   var msg = req.body.msg;
   var title = req.body.title;
   var team = req.body.team;
-  var newMessage = {title: title, msg: msg,sender: sender};
+  console.log(req.body)
+  var dateSent = new Date();
+  var newMessage = {title: title, msg: msg,sender: sender, dateSent:dateSent};
 console.log(newMessage)
 console.log(team)
 let result=[];

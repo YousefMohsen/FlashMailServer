@@ -12,7 +12,7 @@ students: [{ type: Schema.Types.ObjectId, ref: 'Student' }],
         title: String,
         msg: String,
        sender: { type: Schema.Types.ObjectId, ref: 'Teacher' },
-        date: Date,
+        dateSent: Date,
         timeStamp: String}]
 
 });
