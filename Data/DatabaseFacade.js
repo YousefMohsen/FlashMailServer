@@ -177,7 +177,7 @@ return new Promise((resolve, reject)=>{
 find({
     '_id': { $in: studentTeams}},{_id:0,messages:1})
 .where('messages').
-populate('messages.sender').
+populate({path:'messages.sender', }).
 exec(function(err, messages) {
 
     if(messages===null){
@@ -192,7 +192,7 @@ var result = [];
 
 for (let i = 0; i < messages.length; i++) {
 
-result = result.concat(messages[i].messages)
+result = result.concat(messages[i].messages);
     
 }
 resolve(result);
@@ -281,7 +281,9 @@ async deleteStudentByID(studentID){
 
   })
   }
-  
+  async getStudentByMail(studentMail){
+    return Student.findOne({mail: studentMail}, {});
+    }
   /*
      Team.update({
         '_id': team._id

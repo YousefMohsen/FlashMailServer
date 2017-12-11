@@ -37,6 +37,36 @@ console.log("student to delete: ",studentID)
 
 });
 
+    /* GET all messages for that team. *///Todo: change to post 
+    router.get('/login/:studentMail/:token', async(req, res, next)=> {
+      
+      var studentMail = req.params.studentMail;
+     var token = req.params.token;
+      console.log(token);
+    try{
+   await DatabaseFacade.setStudentToken(studentMail, token)
+      result = await DatabaseFacade.getStudentByMail(studentMail);
+    }
+      catch(r){
+    console.log("error!")
+        result = null;
+    
+      }
+      if(result!==null){  
+        
+        
+        res.json(result);
+        
+      
+      }
+      else{ 
+        res.status(500).send("The mail does not match!");
+        console.log("Failed")}
+    
+    
+     
+          });
+
 
 
 module.exports = router;

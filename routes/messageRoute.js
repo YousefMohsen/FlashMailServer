@@ -18,11 +18,11 @@ router.post('/new', async(req, res, next)=> {
   var msg = req.body.msg;
   var title = req.body.title;
   var team = req.body.team;
-  console.log(req.body)
   var dateSent = new Date();
+  var date = new Date();
+  var ts = String(Math.round(date.getTime() / 1000) + date.getTimezoneOffset() * 60);
+  console.log("new date",Date.now())
   var newMessage = {title: title, msg: msg,sender: sender, dateSent:dateSent};
-console.log(newMessage)
-console.log(team)
 let result=[];
   try{
     result = await DatabaseFacade.addNewMessage(newMessage,team);
@@ -91,37 +91,12 @@ console.log("error!")
 
   if(result!==null){  
     
-    
-    res.json(result.slice(timeStamp, result.length));
-    
-  
-  }
-  else{ 
-    res.status(500).send("The mail does not match!");
-    console.log("Failed")}
+    let sorted = result.slice(timeStamp, result.length).sort((a, b) => {
+      return b.dateSent - a.dateSent;
+    });
 
 
- 
-      });
-    /* GET all messages for that team. */
-router.get('/:studentMail/:timeStamp/:token', async(req, res, next)=> {
-  var timeStamp = req.params.timeStamp;
-  var studentMail = req.params.studentMail;
- var token = req.params.token;
-  console.log(token);
-try{
- await DatabaseFacade.setStudentToken(studentMail, token)
-  await DatabaseFacade.getMessagesFromEmail(studentMail);
-  result = await DatabaseFacade.getMessagesFromEmail(studentMail);}
-  catch(r){
-console.log("error!")
-    result = null;
-
-  }
-  if(result!==null){  
-    
-    
-    res.json(result.slice(timeStamp, result.length-1));
+    res.json (sorted);
     
   
   }
@@ -132,6 +107,7 @@ console.log("error!")
 
  
       });
+
 
   
 
