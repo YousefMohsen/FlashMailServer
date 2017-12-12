@@ -27,6 +27,8 @@ mongoose.connect('mongodb://readWriteUser:carlsbergsport500ml@yousefmohsen.dk:27
 
 
     constructor() {
+
+      //this.getStudentsTokens("HoldA").then((res)=>console.log("teamlist:", res))
         //this.getTeamByName("HoldA").then((res)=>console.log(JSON.stringify(res)));
 //this.initTeachers();
 
@@ -100,7 +102,7 @@ team: teamID to a team the sudents will be linked to
  async createNewTeam (students,team){//creates new student document for each student object in the array, and pushes student ids to the given team
 let savedTeam = await this._saveTeam(team);
 console.log(savedTeam._id)
-  let studentFormated =  await this._formatStudentList(students,savedTeam._id);//first set mails to lowercase
+let studentFormated =  await this._formatStudentList(students,savedTeam._id);//first set mails to lowercase
 console.log(students)
 console.log("AFTER!")
 console.log(studentFormated)
@@ -282,14 +284,22 @@ async deleteStudentByID(studentID){
   })
   }
   async getStudentByMail(studentMail){
-    return Student.findOne({mail: studentMail}, {});
+    return Student.findOne({mail: studentMail}, {}).populate('teams',{name:1});
     }
-  /*
-     Team.update({
-        '_id': team._id
-      },
-    {"$pull": { "students": studentID}})
-  */
+
+
+
+
+  async getStudentsTokens(teamName){
+
+   let team = await Team.findOne({name: teamName}, {students: 1}).populate('students',{pushToken: 1})
+  let tokenList = [];
+   for (let student of team.students) {
+    if(student.pushToken){tokenList.push(student.pushToken)}  
+    }
+    return tokenList;
+  }
+
 
 
 initTeachers(){

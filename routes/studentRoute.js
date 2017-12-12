@@ -40,7 +40,7 @@ console.log("student to delete: ",studentID)
     /* GET all messages for that team. *///Todo: change to post 
     router.get('/login/:studentMail/:token', async(req, res, next)=> {
       
-      var studentMail = req.params.studentMail;
+      var studentMail = req.params.studentMail.toLowerCase();
      var token = req.params.token;
       console.log(token);
     try{

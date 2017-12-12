@@ -1,14 +1,17 @@
 var express = require('express');
 var router = express.Router();
 var DatabaseFacade = require('../Data/DatabaseFacade');
-
+var NotificationHandler  = require('../pushNotifications/NotificationHandler')
 //var tc = new testClass();
 
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
+router.get('/', async(req, res, next) =>{
   //tc.getTeam()
-  DatabaseFacade.getMessagesFromEmail('messi@mail.com').then((re)=>console.log(re.length))
+  NotificationHandler.testMethod();
+
+
+ 
   res.send("Hi yohu");
 
   
@@ -24,8 +27,13 @@ router.post('/new', async(req, res, next)=> {
   console.log("new date",Date.now())
   var newMessage = {title: title, msg: msg,sender: sender, dateSent:dateSent};
 let result=[];
+
+
   try{
     result = await DatabaseFacade.addNewMessage(newMessage,team);
+    console.log("in try")
+
+
   }
     
     catch(r){
@@ -33,12 +41,15 @@ let result=[];
       result = null;
   
     }
+    
   
     
     if(result!==null){
-
+      await NotificationHandler.newMessagePush(team,newMessage);
+      
     res.status(200).send("Success!");   }
     else{ 
+      
       res.status(500).send("The mail does not match!");
       console.log("Failed")
     }
