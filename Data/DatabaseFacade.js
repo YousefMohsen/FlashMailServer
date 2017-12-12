@@ -48,7 +48,7 @@ let newMsg = {
 
  //this.addNewMessage(newMsg, "HoldA").then((re)=>console.log(re));
 
-//this.addStudentToTeam("messi@mail.dk","HoldA")
+//this.addStudentToTeam("thiago@mail.dk","HoldB")
 //this.getMessagesFromEmail("Xavi@mail.com")
 //this.setStudentToken("thiago@mail.com","newPushToken").then((r)=>console.log(r)).catch((er)=>console.log(er))
 //this.createNewTeam(listOfStudents,"blsaBlah");
