@@ -5,24 +5,10 @@ let expo = new Expo();
 
  class NotificationHandler  {
 
- constructor(){
 
-    let testMessage ={
-        dateSent: "2017-12-11T21:54:17.475Z",
-        msg: 'Dagens emner bliver:'
-        +'\nEn hurtig opsummering på hele semesteret, eksamens- form/spørgsmål, samt evaluering af semesteret'
-        +'\nEr der specielle spørgsmål/emner I gerne vil have opsummeret denne dag, send en besked, så jeg kan forberede mig.'
-        +'\nMange hilsner',
-        sender: "5a1f1bcf8bffa42e9c5c3e56",
-        title: "Fredag d. 1 December, er årets sidste JavaScript dag",
-      };
-   // this.newMessagePush("HoldA",testMessage);
-}
-     
 
 async newMessagePush(team,newMessage){
-    console.log("newmassegse push")
-    console.log(team, newMessage)
+
     
 let studentsTokens = await  DatabaseFacade.getStudentsTokens(team)
 
@@ -42,7 +28,7 @@ for (let pushToken of studentsTokens) {
     to: pushToken,
     sound: 'default',
     body: newMessage.title.slice(0,35)+"..",
-    title: "You've got a new message in from "+team,
+    title: "You've got a new message in "+team,
     data: { withSome: 'data' },
   }]);
 

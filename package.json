@@ -1,6 +1,11 @@
 {
   "name": "flashmailserver",
   "version": "0.0.0",
+  "author": {
+   "name": "Yousef Mohsen",
+   "url": "https://github.com/yousefMohsen"
+
+  },
   "private": true,
   "scripts": {
     "start": "node ./bin/www",

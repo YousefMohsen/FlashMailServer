@@ -8,89 +8,19 @@ var Student = require("./MongooseSchemas/Student");
 var Teacher = require("./MongooseSchemas/Teacher");
 
 mongoose.connect('mongodb://readWriteUser:carlsbergsport500ml@yousefmohsen.dk:27017/flashmailDB');
-
+/**
+ * All Database Manipulations goes through the DatabaseFacade
+ */
 class DatabaseFacade {
 
-
-
-  constructor() {
-    
-    this.initTeachers();
-
-
-
-    //this.getStudentsTokens("HoldA").then((res)=>console.log("teamlist:", res))
-    //this.getTeamByName("HoldA").then((res)=>console.log(JSON.stringify(res)));
-    //this.initTeachers();
-
-    //this.deleteStudentByID("5a1f1c6964109f51e8114b84");
-    let listOfStudents = [{ name: "Leo Messi", mail: "meSsi@mail.com", teams: ["HoldB"] },
-    { name: "Xavi", mail: "Xavi@mail.com", teams: ["HoldB"] },
-    { name: "Iniesta ", mail: "InieSta@Mail.com", teams: ["HoldB"] },
-    { name: "Thiago", mail: "ThiaGo@MAil.com", teams: ["HoldB"] },
-    ]
-    let newMsg = {
-      title: "message four",
-      msg: "this is msg four",
-      sender: "5a159a97ff41983cd88f0cfe",
-      date: new Date(),
-      timeStamp: "2"
-    }
-
-
-    //this.addNewMessage(newMsg, "HoldA").then((re)=>console.log(re));
-
-    //this.addStudentToTeam("thiago@mail.dk","HoldB")
-    //this.getMessagesFromEmail("Xavi@mail.com")
-    //this.setStudentToken("thiago@mail.com","newPushToken").then((r)=>console.log(r)).catch((er)=>console.log(er))
-    //this.createNewTeam(listOfStudents,"blsaBlah");
-    //this._saveTeam("HoldMondgsdol").then((t)=>console.log(t._id)).catch((r)=>console.log(r));
-    ///this.getAllTeams().then((r)=>console.log(r));
-    //this.addStudentToTeam("Messi@mail.com","HoldA").then((res)=>console.log(res));
-
-    //this.find('Hold1');            
-
-    //new team
-    /*let teamList = [{
-        name:"HoldA",
-        students: [],
-        messages:[]
-        
-      },{
-        name:"HoldB",
-        students: [],
-        messages:[]
-        
-      },{
-        name:"HoldC",
-        students: [],
-        messages:[]
-        
-      }];
-    
-      Team.insertMany(teamList).then((res)=>console.log("S:",res)).catch((er)=>console.log("R:",er));
-    
-    
-    
-    
-      */
-  }
+  /**
+   * creates
+   * @param students - list of student object to be added to database
+   * @param team -  teamID to a team the sudents will be linked to
+   */
 
 
 
-
-
-
-  //save
-
-
-
-
-  /*
-  params 
-  students: list of student object to be added to database
-  team: teamID to a team the sudents will be linked to
-  */
   async createNewTeam(students, team) {//creates new student document for each student object in the array, and pushes student ids to the given team
     let savedTeam = await this._saveTeam(team);
     console.log(savedTeam._id)
@@ -147,26 +77,26 @@ class DatabaseFacade {
   }
 
 
-
+  /**
+   * sets the students push token
+   * @param {String} studentEmail - email of a student 
+   * @param {String} newToken - push token form expo
+   */
 
   async setStudentToken(studentMail, newToken) {
     let mailInLowerCase = studentMail.toLowerCase();
     console.log(mailInLowerCase)
     return await Student.findOneAndUpdate({ mail: mailInLowerCase }, { pushToken: newToken })
-
-
-
   }
-
+  /**
+   * Returns all messages linked to the given mail
+   * @param {String} studentEmail - email of a student 
+   */
   async getMessagesFromEmail(studentEmail) {
     let mailInLowerCase = studentEmail.toLowerCase();
     let foundStudent = await Student.findOne({ mail: mailInLowerCase }).select('teams');
     let studentTeams = foundStudent.teams;
-
     return new Promise((resolve, reject) => {
-
-
-
       Team.
         find({
           '_id': { $in: studentTeams }
@@ -194,12 +124,14 @@ class DatabaseFacade {
             resolve(result);
           }
         });
-
     });
-
   }
 
-
+  /**
+   * Adds a student to a team
+   * @param {String} studentEmail - Email of a student 
+   * @param {String} team - name of a team
+   */
   async addStudentToTeam(studentMail, team) {
     let mailInLowerCase = studentMail.toLowerCase();
     let teamID = await Team.findOne({ name: team }, { _id: 1 });
@@ -209,83 +141,71 @@ class DatabaseFacade {
       { $push: { "teams": teamID._id } },
       { safe: true, upsert: false })
   }
-
   find(team) {
-    //find
     var sender = "59f0a5b7e5274f3808c8bd88";
     var msg = "This is a new Messages content2";
     var title = "msg title2";
     var teamName = "Hold1";
     var newMessage = { title: title, msg: msg, sender: sender };
-
-
     Team.
       findOne({ name: team }).
       populate('messages.sender').
       exec(function (error, doc) {
-
-        console.log(doc);
-        // doc.connections[0].item is a User doc
-        // doc.connections[1].item is an Organization doc
       });
   }
   async _saveTeam(name) {
-
     return await new Team({ name: name }).save((er, model) => {
       if (er) { return null }
       else {
         return model._id;
-        // console.log(model)
-        console.log(name, ' created!');
       }
     })
   }
+/**
+ * returns an array with all team names
+ */
   async getAllTeams() {
-
-
     let teams = await Team.find({}, { name: 1 });
     var teamList = [];
-
     teams.forEach(function (team) {
-      teamList.push(team.name);
+    teamList.push(team.name);
     });
-
-
     return teamList;
   }
-
-
+/**
+ * Returns team object for a given team
+ * @param {String} teamName - name of a team
+ */
   async getTeamByName(teamName) {
     return Team.findOne({ name: teamName }, {}).where('messages').populate('messages.sender').populate('students');
   }
 
-
+/**
+ * Deletes a student 
+ * @param {String} studentID - ID of a student 
+ */
   async deleteStudentByID(studentID) {
-
     return Student.findByIdAndRemove(studentID).then((res) => {
-
-      console.log("TO delete: " + res);
-
       for (let team of res.teams) {
         Team.findByIdAndUpdate(team,
           { $pull: { "students": new ObjectId(studentID) } })
           .catch((err) => console.log(err))
       }
-
-
-
-
     })
   }
+  /**
+   * Returns detailed infro about a student with the given email 
+   * @param {String} studentEmail - email of a student 
+   */
   async getStudentByMail(studentMail) {
     return Student.findOne({ mail: studentMail }, {}).populate('teams', { name: 1 });
   }
 
-
-
-
+/**
+ * Returns a list with all students in a team that have push tokens
+ * @param {String} teamName - name of a team 
+ */
   async getStudentsTokens(teamName) {
-
     let team = await Team.findOne({ name: teamName }, { students: 1 }).populate('students', { pushToken: 1 })
     let tokenList = [];
     for (let student of team.students) {
@@ -293,9 +213,9 @@ class DatabaseFacade {
     }
     return tokenList;
   }
-
-
-
+/**
+ * Adds mock data. Delete this method in deployment
+ */
   initTeachers() {
     var kasper = new Teacher({
       _id: new mongoose.Types.ObjectId(),
