@@ -13,6 +13,9 @@ mongoose.connect('mongodb://readWriteUser:carlsbergsport500ml@yousefmohsen.dk:27
  */
 class DatabaseFacade {
 
+  constructor(){
+  }
+
   /**
    * creates
    * @param students - list of student object to be added to database
@@ -23,16 +26,9 @@ class DatabaseFacade {
 
   async createNewTeam(students, team) {//creates new student document for each student object in the array, and pushes student ids to the given team
     let savedTeam = await this._saveTeam(team);
-    console.log(savedTeam._id)
     let studentFormated = await this._formatStudentList(students, savedTeam._id);//first set mails to lowercase
-    console.log(students)
-    console.log("AFTER!")
-    console.log(studentFormated)
-
     let savedStudents = await Student.insertMany(studentFormated); //save all students
     let savedStudentsIds = savedStudents.map((student) => student._id); //get an array of student ids
-    //console.log(savedStudentsIds);
-
     Team.findOneAndUpdate(
       { name: team },
       { $push: { "students": { $each: savedStudentsIds } } },
@@ -213,43 +209,43 @@ class DatabaseFacade {
     }
     return tokenList;
   }
+
 /**
  * Adds mock data. Delete this method in deployment
  */
-  initTeachers() {
-    var kasper = new Teacher({
-      _id: new mongoose.Types.ObjectId(),
-      name: "Kasper Oesterbye",
-      mail: "koe@cphbusiness.dk",
-      imgUrl: "http://yousefmohsen.dk:4000/images/kasper.jpg",
+initTeachers() {
+  var kasper = new Teacher({
+    _id: new mongoose.Types.ObjectId(),
+    name: "Kasper Oesterbye",
+    mail: "koe@cphbusiness.dk",
+    imgUrl: "http://yousefmohsen.dk:4000/images/kasper.jpg",
 
-    });
+  });
 
-    kasper.save(function (err) {
-      if (err) throw err;
+  kasper.save(function (err) {
+    if (err) throw err;
 
-      console.log('Kasper created!');
-    });
+    console.log('Kasper created!');
+  });
 
 
 
-    var larsM = new Teacher({
-      _id: new mongoose.Types.ObjectId(),
+  var larsM = new Teacher({
+    _id: new mongoose.Types.ObjectId(),
 
-      name: "Lars Mortensen",
-      mail: "lam@cphbusiness.dk",
-      imgUrl: "http://yousefmohsen.dk:4000/images/lars.png",
+    name: "Lars Mortensen",
+    mail: "lam@cphbusiness.dk",
+    imgUrl: "http://yousefmohsen.dk:4000/images/lars.png",
 
-    });
+  });
 
-    larsM.save(function (err) {
-      if (err) throw err;
+  larsM.save(function (err) {
+    if (err) throw err;
 
-      console.log('Lars created!');
-    });
+    console.log('Lars created!');
+  });
 
-  }
-
+}
 
 
 

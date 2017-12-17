@@ -10,7 +10,7 @@ var NotificationHandler = require('../pushNotifications/NotificationHandler')
  * Returns staus code 500 if failed to delete the student
  */
 router.post('/new', async (req, res, next) => {
-  let sender = '5a33c494c5006823d08f1708';//req.body.sender; TODO: get sender
+  let sender = '5a36d680e08d3329d43e7b9e';//req.body.sender; TODO: get sender
   let msg = req.body.msg;
   let title = req.body.title;
   let team = req.body.team;
