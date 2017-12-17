@@ -5,28 +5,18 @@ var NotificationHandler  = require('../pushNotifications/NotificationHandler')
 //var tc = new testClass();
 
 
-/* GET users listing. */
-router.get('/', async(req, res, next) =>{
-  //tc.getTeam()
-  NotificationHandler.testMethod();
-
-
- 
-  res.send("Hi yohu");
-
-  
-});
 router.post('/new', async(req, res, next)=> {
-  var sender = '5a1f1bcf8bffa42e9c5c3e56';//req.body.sender; TODO: get sender
-  var msg = req.body.msg;
-  var title = req.body.title;
-  var team = req.body.team;
-  var dateSent = new Date();
-  var date = new Date();
-  var ts = String(Math.round(date.getTime() / 1000) + date.getTimezoneOffset() * 60);
+
+  let sender = '5a33c494c5006823d08f1708';//req.body.sender; TODO: get sender
+  let msg = req.body.msg;
+  let title = req.body.title;
+  let team = req.body.team;
+  let dateSent = new Date();
+  let date = new Date();
+  let ts = String(Math.round(date.getTime() / 1000) + date.getTimezoneOffset() * 60);
   console.log("new date",Date.now())
-  var newMessage = {title: title, msg: msg,sender: sender, dateSent:dateSent};
-let result=[];
+  let newMessage = {title: title, msg: msg,sender: sender, dateSent:dateSent};
+  let result=[];
 
 
   try{

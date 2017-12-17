@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var Schema =mongoose.Schema;
+var Schema = mongoose.Schema;
 
 // create a schema
 
@@ -12,7 +12,7 @@ var teacherSchema = new Schema({
 });
 
 
-var Teacher = mongoose.model('Teacher', teacherSchema);
+let Teacher = mongoose.model('Teacher', teacherSchema);
 
 // make this available to our users in our Node applications
 module.exports = Teacher;

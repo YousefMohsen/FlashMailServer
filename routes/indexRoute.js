@@ -5,7 +5,7 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   //res.render('index', { title: 'LektApp' });
 
-res.send("LektAPPAPi");
+res.send("Welcome to the Flash Mail Server");
 });
 
 module.exports = router;

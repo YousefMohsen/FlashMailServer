@@ -55,7 +55,6 @@ DatabaseFacade.createNewTeam(students.slice(1,students.length),teamName)
  
   })
 
-/* GET users listing. */
 router.get('/:team', async(req, res, next) =>{
 let teamName = timeStamp = req.params.team;
 try{
