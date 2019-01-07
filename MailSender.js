@@ -10,7 +10,7 @@ var transporter = nodemailer.createTransport({
 
 var mailOptions = {
   from: 'lektappcph@gmail.com',
-  to: 'yousefmohsen@outlook.dk, janusudsen@yahoo.com',
+  to: 'mail1,mail2',
   subject: 'Lektapp Server Mail',
   text: 'Sendt fra Lektapp Servers Inc.'
 };
