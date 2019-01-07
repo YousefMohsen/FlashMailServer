@@ -5,7 +5,7 @@
 
 
 
-# FlashMail - WebClient
+# FlashMail - Server
 
 The goal of this report is to help future Computer Science in the Students Writings course to understand the parts of the project we have started building and to help them complete the development and maintenance of this project. 
 ### Table of Contents
